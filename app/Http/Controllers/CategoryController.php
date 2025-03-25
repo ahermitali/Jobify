@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categories;
+use App\Models\Media;
 use Illuminate\support\Str;
 
 
 class CategoryController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $categories = Categories::all();
         return view('admin.categories.index', compact('categories'));
     }
@@ -24,12 +26,16 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:categories,name|max:255',
+            'image' => 'nullable|string'
+            
         ]);
 
+        
         Categories::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
-            'status' => $request->status ?? 1, 
+            'image' => $request->image,
+            'status' => $request->status ?? 1,
         ]);
 
         return redirect()->route('categories.index')->with('success', 'Category added successfully.');
@@ -47,12 +53,14 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|max:255|unique:categories,name,' . $id,
+            'image' => 'nullable|string'
         ]);
 
         $category = Categories::findOrFail($id);
         $category->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'image' => $request->image,
             'status' => $request->status ?? 1,
         ]);
 

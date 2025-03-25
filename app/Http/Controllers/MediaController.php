@@ -51,38 +51,50 @@ class MediaController extends Controller
         // Paginate results with the specified limit
         $mediaItems = $mediaQuery->skip($start)->take($limit)->get();
 
-        // Prepare the media items for response (you can customize this)
+        // Prepare the media items for response
         $html = '';
-        foreach ($mediaItems as $media) {
-            //$imageUrl = asset('storage/images/' . $media->filename); // Get the image URL
 
-            $imageUrl = $media->url;
+        foreach ($mediaItems as $media) {
+            $imageUrl = $media->url;  // Use the media URL
+            $fullImagePath = asset('storage/' . $media->path); // Construct the full image path
 
             // Example condition to toggle between radio and checkbox
-            $inputType = ($selectableType === 'radio') ? 'radio' : 'checkbox'; // Determine input type
+            $inputType = ($selectableType === 'radio') ? 'radio' : 'checkbox';
 
-            // Construct HTML for each media item
+            // Construct HTML for each media item with data-image-path attribute
             $html .= "
-                <div class='col-sm-2 col-6 mb-3' id='media-item{$media->id}'>
-                    <style>
-                        .media-image{$media->id} {
-                            background-image: url('{$imageUrl}');
-                            min-height: 20vh;
-                            background-position: center;
-                            background-repeat: no-repeat;
-                            background-size: cover;
-                        }
-                    </style>
-                    <a href='javascript:void(0);' class='btn-media-item form-check-label' data-id='{$media->id}'>
-                        <div class='card thumbnail h-100 media-image{$media->id}'>
-                            <div class='text-left p-1'>
-                                <input type='{$inputType}' name='media_id" . ($inputType === 'checkbox' ? '[]' : '') . "' class='select-media' id='media_id{$media->id}' value='{$media->path}' data-column='featureimage' data-media-url='{$imageUrl}'>
-                            </div>
-                        </div>
-                    </a>
-                </div>";
-        }
+        <div class='col-sm-2 col-6 mb-3 media-item' 
+             id='media-item{$media->id}' 
+             data-image-path='{$fullImagePath}'>  <!-- Add the data-image-path attribute -->
+            
+            <style>
+                .media-image{$media->id} {
+                    background-image: url('{$imageUrl}');
+                    min-height: 20vh;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                }
+            </style>
 
+            <a href='javascript:void(0);' 
+               class='btn-media-item form-check-label' 
+               data-id='{$media->id}'>
+               
+                <div class='card thumbnail h-100 media-image{$media->id}'>
+                    <div class='text-left p-1'>
+                        <input type='{$inputType}' 
+                               name='media_id" . ($inputType === 'checkbox' ? '[]' : '') . "' 
+                               class='select-media' 
+                               id='media_id{$media->id}' 
+                               value='{$media->path}' 
+                               data-column='featureimage' 
+                               data-media-url='{$imageUrl}'>
+                    </div>
+                </div>
+            </a>
+        </div>";
+        }
 
         // Return the HTML content to append or replace in the front-end
         return response()->json(['html' => $html]);

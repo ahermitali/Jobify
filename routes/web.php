@@ -49,6 +49,7 @@ Route::get('/media', [MediaController::class, 'index'])->name('media');
 Route::post('/media', [MediaController::class, 'store'])->name('media.store');
 Route::post('/media/load', [MediaController::class, 'load'])->name('media.load');
 
+
 // Route::get('/admin/menu', [MenuController::class, 'index'])->name('menu.index');
 // Route::get('/menu/create', [MenuController::class, 'create'])->name('menu.create');
 // Route::post('/admin/menu/store', [MenuController::class, 'store'])->name('menu.store');
@@ -78,6 +79,7 @@ Route::put('/menus/update', [MenuController::class, 'update']);
 Route::delete('/menus/items/{id}', [MenuController::class, 'destroy']);
 
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+// Route::post('/categories/create', [CategoryController::class, 'store']); 
 Route::post('/categories/store',[CategoryController::class, 'store'])->name('categories.store');
 Route::get('/categories/index', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/categories/edit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');

@@ -51,6 +51,7 @@
         <div class="main-content">
 
             @yield('content')
+            @stack('modal')
 
             @include('admin.layouts.footer')
 
